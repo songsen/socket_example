@@ -1,0 +1,4 @@
+cmake_minimum_required(VERSION 2.8)
+PROJECT(CLIENT)
+SET(LIB_SRC client.c)
+add_executable(client ${LIB_SRC})
