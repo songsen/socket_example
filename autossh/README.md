@@ -13,4 +13,9 @@
  * 3. Connection reset   服务器与客户端网络断开,服务器没有收到FIN , 再次连接可成功
  * 
  * create data :2018-04-18 18:21:21 by Eason
+ *  /*
+ * command format: 
+ * ./autosshlite ssh -N -o "ServerAliveInterval 60" -o "ServerAliveCountMax 3" -R        0.0.0.0:2202:localhost:22 eason@1.2.3.1
+ * _________________________ 检测数据包的发送间隔 __________ 检测的最大发送次数 超过之后将会timeout 然后关掉ssh ______________________
+*/
  */
