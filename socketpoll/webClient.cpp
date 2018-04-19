@@ -77,7 +77,14 @@ int main(int argc, char **argv)
     //     pthread_join(t7, NULL);
     //pthread_create(&t1, NULL, clientn, (void *)"1\n");
     //pthread_join(t1, NULL);
-     more();
+     //more();
+    //char sendbuf[64] = ; 
+    try{ //123.207.20.45
+        Socket *sock = new Socket("1.2.3.1",2202);
+        int i = sock->readcbuf("SSH-2.0-OpenSSH_5.3");
+    }catch(int &i){
+        std::cout<<i<<std::endl;
+    }
     return 0;
 }
 
