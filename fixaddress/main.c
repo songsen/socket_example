@@ -24,6 +24,7 @@ int main(int argc, char **argv)
 
     char *cmd = (char *)calloc(sizeof(char),126);
     printf("%s\n",setIP(cmd,sizeof(cmd),interface,hostip));
+    //execp("dhclient")//需要这句,才能正常联网会有网
     free(cmd);
 
     return 0;

@@ -39,6 +39,8 @@
 #include <arpa/inet.h>
 #include <fcntl.h>
 #include <netinet/tcp.h>
+ #include <sched.h>
+#include <netdb.h>
 
 #define TEST_STRING "http://songsen.top"
 #define connrefuse "Connection refused"  //ECONNREFUSED
@@ -92,6 +94,9 @@ int main(int argc, char **argv)
     argpth pritarg;
     char serip[32], serport[32];
     char retbuf[]=TEST_STRING;
+   
+    
+    sched_yield();
 
     signal( SIGPIPE, SIG_IGN );
 
@@ -124,6 +129,7 @@ int main(int argc, char **argv)
 
     for(int n=2;--n;){
         //diagnose connect issue
+        sched_yield();
         strncpy(retbuf,TEST_STRING,sizeof(retbuf));
         printf("Checking server's status ... \n");
 
@@ -135,7 +141,7 @@ int main(int argc, char **argv)
         ||(ENETUNREACH == err)      //ENETUNREACH : 本机有可能断网
         ||(EHOSTUNREACH == err)){   //EHOSTUNREACH:No route to host,可能是ip地址不存在
             printf("Trying it agian after 60 second, left %d\n",n);
-            sleep(10);// 需要等待本机网络正常后在尝试;
+            sleep(60);// 需要等待本机网络正常后在尝试;
             continue;
         }else if((ECONNREFUSED == err)
         ||(ECONNRESET == err)){
@@ -144,7 +150,7 @@ int main(int argc, char **argv)
             continue;    
         }else{
             printf("Unknown reason.Trying it agian after 60 second, left %d\n",n);
-            sleep(10);// 需要等待本机网络正常后在尝试;
+            sleep(60);// 需要等待本机网络正常后在尝试;
             continue;
         }
         
@@ -204,9 +210,16 @@ int getStatusFromServer(const char *host, int portnum,char *rwbuf,char rwbuflen)
         perror("setsockopt err");
     }
 
-	bzero( &servadd, sizeof(servadd) );     /* zero the address     */
-    if(inet_aton(host,&servadd.sin_addr)<=0)
-        return errno;
+    bzero( &servadd, sizeof(servadd) );     /* zero the address     */
+    struct hostent      *hp;            /* used to get number */
+    hp = gethostbyname( host );            /* lookup host's ip #   */
+	if (hp == NULL) 
+		perror(host);            	/* or die               */
+	bcopy(hp->h_addr, (struct sockaddr *)&servadd.sin_addr, hp->h_length);
+
+    // if(inet_aton(host,&servadd.sin_addr)<=0)
+    //     return errno;
+
 	servadd.sin_port = htons(portnum);      /* fill in port number  */
 	servadd.sin_family = AF_INET ;          /* fill in socket type  */
 
