@@ -1,26 +1,24 @@
-SERV = client 
+SERV = aserver
 
-CLI = webClient
+CLI = aclient
 
 
-SRCS := Socket.cpp \
-		webServer.cpp \
-		webClient.cpp \
-		ThreadPoll.cpp 
+SRCS := server.c \
+		client.c 
 
 #patsubst 逗号之间不能存在空格,以%.o替换掉%.cpp
-OBJS = $(patsubst %.cpp,%.o,$(SRCS))
+OBJS = $(patsubst %.c,%.o,$(SRCS))
 
 
-CC = g++
+CC = gcc
 CFLAGS = -g 
-LDFLAGS = -I/usr/include -L/usr/lib -lncurses -lrt  -L .
-CXXFLAGS := -w -std=c++11 -lpthread 
+#LDFLAGS = -I/usr/include -L/usr/lib -lncurses -lrt  -L .
+CXXFLAGS := 
+#-w -std=c++11 -lpthread 
 
-count := 1
 
-SSRC = $(filter-out $(CLI).o,$(OBJS))
-CSRC = $(filter-out $(SERV).o,$(OBJS))
+SSRC = $(filter-out client.o,$(OBJS))
+CSRC = $(filter-out server.o,$(OBJS))
 
 all:$(SERV) $(CLI)
 
@@ -33,7 +31,7 @@ $(CLI):$(CSRC)
 #$(EXE):$(OBJS)
 #	$(CC)  $^ -o $@ $(LDFLAGS)
 
-$(OBJS):%.o:%.cpp 
+$(OBJS):%.o:%.c
 	@echo $(OBJS) -------  ----------
 	$(CC)  -c $(CFLAGS) $< -o $@ $(CXXFLAGS) 
 

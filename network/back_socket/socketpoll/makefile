@@ -1,4 +1,4 @@
-SERV = client 
+SERV = webServer
 
 CLI = webClient
 
