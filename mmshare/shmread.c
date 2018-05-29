@@ -6,7 +6,9 @@
 #include <string.h>
 #include <errno.h>
 #include <unistd.h>
-
+#include <stdlib.h>
+#include <sys/shm.h>  
+#include "shmread.h"
 /*
 int shm_open(const char *name, int oflag, mode_t mode);
 //创建或打开一个共享内存,成功返回一个整数的文件描述符，错误返回-1。
@@ -18,17 +20,23 @@ int shm_unlink(const char *name);
 编译时要加库文件-lrt
 */
 
-#define SHMNAME "mqtt_shm"
+//#define SHMNAME "mqtt_shm"
 #define OPEN_FLAG O_RDWR|O_CREAT
 #define OPEN_MODE 00777
 #define FILE_SIZE 512
 
-int main(void)
+#define SHMNAME path
+
+char* readshmm(char *path)
 {
     int ret = -1;
     int fd = -1;
 
-    char buf[4096] = {0};
+    
+    //char buf[512] = {0};
+
+    char* buf = calloc(sizeof(char),256);
+
     void* add_r = NULL;
 
     //创建或者打开一个共享内存
@@ -36,7 +44,7 @@ int main(void)
     if(-1 == (ret = fd))
     {
         perror("shm  failed: ");
-        goto _OUT;
+       return NULL;
     }
     
     //调整确定文件共享内存的空间
@@ -44,7 +52,7 @@ int main(void)
     if(-1 == ret)
     {
         perror("ftruncate faile: ");
-        goto _OUT;
+       return NULL;
     }
     
     //映射目标文件的存储区
@@ -52,37 +60,37 @@ int main(void)
     if(NULL == add_r)
     {
         perror("mmap add_r failed: ");
-        goto _OUT;
+       return NULL;
     }    // shm_unlink(SHMNAME);
     // if(-1 == ret)
     // {
     //     perror("shm_unlink faile: ");
-    //     goto _OUT;
+    //    return NULL;
     // }
 
     //memcpy 内存共享 写入内容
-    memcpy(buf, add_r, sizeof(buf));
+    memcpy(buf, add_r, 256);
     
-    printf("buf = %s\n", buf);
+   // printf("buf = %s\n", buf);
 
     //取消映射
     ret = munmap(add_r, FILE_SIZE);
     if(-1 == ret)
     {
         perror("munmap add_r faile: ");
-        goto _OUT;
+       return NULL;
     }
     //删除内存共享
     // shm_unlink(SHMNAME);
     // if(-1 == ret)
     // {
     //     perror("shm_unlink faile: ");
-    //     goto _OUT;
+    //    return NULL;
     // }
 
 
 _OUT:    
-    return ret;
+    return buf;
 }
 
 
