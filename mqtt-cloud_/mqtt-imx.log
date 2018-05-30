@@ -1,0 +1,6 @@
+20180529 171235.886 Connecting:
+20180529 171235.997 Connected:21648580
+20180529 171235.997 Subscribing to topic temperature with client xencentcloud at QoS 0
+20180529 171236.051 subscribe successed,21648580:
+20180529 172026.320 Stopping
+20180529 172026.320 onDisconnect

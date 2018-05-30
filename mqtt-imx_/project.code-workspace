@@ -1,0 +1,16 @@
+{
+	"folders": [
+		{
+			"path": "."
+		}
+	],
+	"settings": {
+		"files.associations": {
+			"strings.h": "c",
+			"stdio.h": "c",
+			"mqttclient.h": "c",
+			"stat.h": "c",
+			"unistd.h": "c"
+		}
+	}
+}

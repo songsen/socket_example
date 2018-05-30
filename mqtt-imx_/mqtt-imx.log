@@ -1,0 +1,6 @@
+20180529 171031.830 Connecting:
+20180529 171031.949 Connected:31331556
+20180529 171031.949 Subscribing to topic get_temperature with client acer-x86 at QoS 0
+20180529 171032.004 subscribe successed,31331556:
+20180529 172056.600 published
+20180529 172056.600 onDisconnect
