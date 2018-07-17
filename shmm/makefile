@@ -30,7 +30,7 @@ $(target):$(OBJ)
 $(OBJ):$(SRCS)
 	$(CC) -c $(*F).c -o $@ $(CFLAG) $(LFLAG)
 
-.PHY clearn:
+.PHY clean:
 	rm -rf $(OBJ) $(target) $(OBJ_DIR) $(BIN_DIR)
 
 
